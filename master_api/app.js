@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const cors = require('cors'); 
 const authRoutes = require('./presentation/routes/authRoutes');
-const authenticateToken = require('./presentation/middleware/auth');
+const resumeRoutes = require('./presentation/routes/resumeRoutes')
 
 // Start Web Server.
 const app = express();
@@ -15,15 +15,14 @@ app.use(cors());
 app.use(cookieParser()); 
 app.use(bodyParser.json());
 
-// Routes setup
+// Authorization: Login, Signup and Log out related routes. 
 app.use(authRoutes);
 
-// Protected route
-app.get('/dashboard', authenticateToken, (req, res) => {
-    res.json({ message: `Hello ${req.user.username}, you have access to this protected route` });
-});
+// Resume Upload: This routes will deal with recieveing Resumes from Client and Processing. 
+app.use(resumeRoutes);
 
-// Server setup
+
+
 const PORT = 5100;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
