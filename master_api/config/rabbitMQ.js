@@ -1,6 +1,6 @@
 const amqp = require('amqplib');
 
-const RABBITMQ_URL = 'amqp://rabbitmq:5672';
+const RABBITMQ_URL = `amqp://${process.env.RABBITMQ_HOST}:${process.env.RABBITMQ_PORT}`;
 
 let connections = {};
 let channels = {};
@@ -24,7 +24,7 @@ const getChannel = async (queue) => {
 const sendToQueue = async (queue, message) => {
     try {
         const channel = await getChannel(queue);
-        channel.sendToQueue(queue, Buffer.from(message), { persistent: true });
+        channel.sendToQueue(queue, Buffer.from(JSON.stringify(message)), { persistent: true });
     } catch (err) {
         console.error(err);
     }
