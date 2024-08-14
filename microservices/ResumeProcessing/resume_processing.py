@@ -5,16 +5,21 @@ import docx
 import PyPDF2
 import ollama
 import json
+import requests
+
 
 
 connection = None
 channel = None
 
 
-def convert_resume_to_text(resume_format, file_path):
+def convert_resume_to_text(file_path):
     # Check if the resume format is .pdf
-    if resume_format.lower() == '.pdf':
+    logging.info(file_path)
+    logging.info(file_path.split(".")[1].lower())
+    if file_path.split(".")[1].lower() == 'pdf':
         # Open the PDF file and scrape all the text
+        logging.info("we aer in")
         try:
             with open(file_path, 'rb') as pdf_file:
                 totalText = ""
@@ -25,11 +30,11 @@ def convert_resume_to_text(resume_format, file_path):
                     totalText += text
                 return totalText
         except Exception as e:
-            print(f"Error reading PDF: {e}")
+            logging.info(f"Error reading PDF: {e}")
             return None
     
     # Check if the resume format is .docx
-    elif resume_format.lower() == '.docx':
+    elif file_path.split(".")[1].lower() == 'docx':
         try:
             doc = docx.Document(file_path)
             text = ""
@@ -44,6 +49,49 @@ def convert_resume_to_text(resume_format, file_path):
     else:
         print("Unsupported file format")
         return None
+
+
+def generate_response(prompt):
+    url = "http://host.docker.internal:11434/api/generate"
+    
+    headers = {
+        "Content-Type": "application/json"
+    }
+    
+    data = {
+        "model": "llama3",
+        "prompt": prompt,
+        "format": "json",
+        "stream": False
+    }
+    
+    try:
+        response = requests.post(
+            url,
+            headers=headers,
+            json=data
+        )
+        
+        # Check if the response status code indicates an error
+        response.raise_for_status()
+        
+        # Parse and return the JSON response
+        return response.json()
+    
+    except requests.exceptions.HTTPError as http_err:
+        logging.info(f"HTTP error occurred: {http_err}")
+    except requests.exceptions.ConnectionError as conn_err:
+        logging.info(f"Connection error occurred: {conn_err}")
+    except requests.exceptions.Timeout as timeout_err:
+       logging.info(f"Timeout error occurred: {timeout_err}")
+    except requests.exceptions.RequestException as req_err:
+        logging.info(f"An error occurred: {req_err}")
+    except Exception as err:
+        logging.info(f"An unexpected error occurred: {err}")
+
+
+
+
 
 def convert_resume_to_json(textResume):
     prompt = f"""
@@ -61,17 +109,8 @@ def convert_resume_to_json(textResume):
       "certifications": []
     }}
     """
-
-    # Send the prompt to LLaMA
-    response = ollama.chat(model='llama3.1', messages=[
-        {
-            'role': 'user',
-            'content': prompt,
-        },
-    ])
-
-    return response
-
+    return generate_response(prompt)
+    
 def initialize_rabbitmq():
     global connection, channel
     while True:
@@ -133,11 +172,12 @@ def process_resume(ch, method, properties, body):
     user_id = parsed_message['messageId']
     received_message = parsed_message['filePath']
 
-    # textResume = convert_resume_to_text(".pdf",received_message)
-    # jsonResume = convert_resume_to_json(textResume)
-    # message = jsonResume['message']['content']
+    textResume = convert_resume_to_text(received_message)
+    jsonResume = json.dumps(convert_resume_to_json(textResume))["response"]
+    # send_message = jsonResume['message']['content'] 
+    # print(send_message)
 
-    send_message = "Processed"
+    send_message = jsonResume
 
     logging.info(f"Processed message: {send_message}")
 

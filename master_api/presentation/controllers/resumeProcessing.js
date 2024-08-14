@@ -6,7 +6,7 @@ async function uploadResume(req, res) {
     try {
         console.log("beginning the resume upload.")
         const messageId = uuidv4();
-        const filePath = "Mayokun Resume.pdf";
+        const filePath = "Mayokun_Resume.pdf";
         const message = {
             filePath: filePath,
             messageId: messageId
