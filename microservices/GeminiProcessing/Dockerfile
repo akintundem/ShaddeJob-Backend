@@ -9,4 +9,4 @@ COPY resume_processing.py ./
 
 COPY "Mayokun_Resume.pdf" ./
 
-CMD ["python", "resume_processing.py"]
+CMD ["python", "MainProcessor.py"]

@@ -6,13 +6,15 @@ async function uploadResume(req, res) {
     try {
         console.log("beginning the resume upload.")
         const messageId = uuidv4();
+        const action = "ResumeJSON"
         const filePath = "Mayokun_Resume.pdf";
         const message = {
             filePath: filePath,
+            action: action,
             messageId: messageId
         };
         
-        sendToQueue('send_resume_to_process_container', message);
+        sendToQueue('contact_genai_for_processing', message);
         await receiveFromQueue(messageId, (processMessage) => {
             // we will be taking the response that correlates with the correlationID
            console.log("Recieved")
