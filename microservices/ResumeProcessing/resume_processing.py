@@ -95,19 +95,9 @@ def generate_response(prompt):
 
 def convert_resume_to_json(textResume):
     prompt = f"""
-    I have provided the following resume text. Please extract the following information and format it as a JSON object with the following keys: "skills", "education", "volunteering", "experience", and "certifications". Each key should contain an array of relevant entries.
+    Generate a Resume
+    Resume: {textResume}
 
-    Resume:
-    {textResume}
-
-    JSON Output:
-    {{
-      "skills": [],
-      "education": [],
-      "volunteering": [],
-      "experience": [],
-      "certifications": []
-    }}
     """
     return generate_response(prompt)
     
