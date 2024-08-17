@@ -2,7 +2,8 @@ import logging
 import docx
 import PyPDF2
 import google.generativeai as genai
-
+import json
+ 
 class ResumeProcessor:
     def __init__(self, api_key, system_instructions):
         genai.configure(api_key=api_key)
@@ -58,7 +59,7 @@ class ResumeProcessor:
         model = genai.GenerativeModel(
             model_name="gemini-1.5-flash",
             generation_config=generation_config,
-            system_instruction=self.system_instructions[instruction_key],
+            system_instruction=json.loads(self.system_instructions)[instruction_key]
         )
 
         chat_session = model.start_chat(history=[])

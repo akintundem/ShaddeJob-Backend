@@ -1,0 +1,10 @@
+```json
+{
+    "skills": [
+        {
+            "skill": "Java",
+            "proficiency": ""
+        }
+    ]
+}
+```
