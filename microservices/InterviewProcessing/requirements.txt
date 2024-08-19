@@ -1,0 +1,5 @@
+json
+google.generativeai
+pymongo
+uuid
+pika
