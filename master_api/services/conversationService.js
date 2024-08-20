@@ -43,12 +43,11 @@ const continueChatService = async (user_id, chat_id, userMessage) => {
     const processMessage = await receiveFromQueue(messageId);
 
     let response_message = {
-        action: "Stop",
         chat_id: "",
         bot_response: ""
     };
 
-    if (processMessage.action === "Chat_Started") {
+    if (processMessage.action === "Bot_Responded") {
         response_message.chat_id = processMessage.chat_id;
         response_message.bot_response = await pullLastMessage(); 
     }

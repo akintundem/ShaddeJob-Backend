@@ -40,7 +40,6 @@ const conversationSchema = new mongoose.Schema({
     }
 });
 
-// Middleware to update the `updatedAt` field on every save
 conversationSchema.pre('save', function(next) {
     this.updatedAt = Date.now();
     next();

@@ -2,7 +2,7 @@ import os
 import json
 
 from GeminiService import GeminiService
-from MongoDBMService import MongoDBService
+from MongoDBMService import UsersDBService,ConversationDBService
 from RabbitMQManager import RabbitMQManager 
 
 class ChatBot:
@@ -57,13 +57,14 @@ if __name__ == "__main__":
     api_key = os.getenv("GEMINI_API_KEY")
     mongo_uri = os.getenv("MONGO_URI")
     db_name = os.getenv("MONGO_DB_NAME")
-    collection_name = os.getenv("collection_name")
+    conversations_collection_name = os.getenv("conversations_collection_name")
+    users_collection_name = os.getenv("users_collection_name")
     system_instructions_file_name = "system_instruction.txt"
 
-
     gemini_service = GeminiService(api_key)
-    mongo_service = MongoDBService(mongo_uri, db_name, collection_name)
-    chatbot = ChatBot(gemini_service, mongo_service)
+    conversation_db_service = ConversationDBService(mongo_uri, db_name, conversations_collection_name)
+    users_db_service = UsersDBService(mongo_uri, db_name, users_collection_name)
+    chatbot = ChatBot(gemini_service, conversation_db_service)
 
     def on_message_callback(ch, method, properties, body):        
         parsed_message = json.loads(body.decode())
@@ -73,8 +74,8 @@ if __name__ == "__main__":
 
         if action == "StartChat":
             user_id = parsed_message['user_id']
-            jobDescription = "Pull it from Job Bank."
-            summaryOfResume = "Pull it from user ID"
+            jobDescription = users_db_service.get_job_description(user_id)
+            summaryOfResume = users_db_service.get_summary_of_resume(user_id)
             system_instructions = setup_system_instruction(system_instructions_file_name, jobDescription, summaryOfResume)
             chat_id = chatbot.create_chat_session(user_id,system_instructions)
             message = {
@@ -84,8 +85,9 @@ if __name__ == "__main__":
             rabbitmq_manager.send_message(json.dumps(message),messageId)
         elif action == "ConstChat":
             chat_id = parsed_message['chat_id']
-            user_input = "get message from DB"
-            chatbot.handle_user_input(chat_id, user_input)
+            user_id = parsed_message['user_id']
+            user_input = conversation_db_service.get_last_user_input(chat_id,user_id)
+            chatbot.handle_user_input(user_id, chat_id, user_input)
             message = {
                 "action": "Bot_Responded",
                 "chat_id": chat_id
