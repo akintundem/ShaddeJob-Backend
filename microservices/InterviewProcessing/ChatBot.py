@@ -67,7 +67,7 @@ if __name__ == "__main__":
 
     def on_message_callback(ch, method, properties, body):        
         parsed_message = json.loads(body.decode())
-        request_id = parsed_message['request_id']
+        messageId = parsed_message['messageId']
         action = parsed_message['action']
         ch.basic_ack(delivery_tag=method.delivery_tag)
 
@@ -77,11 +77,19 @@ if __name__ == "__main__":
             summaryOfResume = "Pull it from user ID"
             system_instructions = setup_system_instruction(system_instructions_file_name, jobDescription, summaryOfResume)
             chat_id = chatbot.create_chat_session(user_id,system_instructions)
-            rabbitmq_manager.send_message("Chat_Started",request_id)
+            message = {
+                "action": "Chat_Started",
+                "chat_id": chat_id
+            }
+            rabbitmq_manager.send_message(json.dumps(message),messageId)
         elif action == "ConstChat":
             chat_id = parsed_message['chat_id']
-            user_input = parsed_message['user_input']
+            user_input = "get message from DB"
             chatbot.handle_user_input(chat_id, user_input)
-            rabbitmq_manager.send_message("Bot_Responded",request_id)
+            message = {
+                "action": "Bot_Responded",
+                "chat_id": chat_id
+            }
+            rabbitmq_manager.send_message(json.dumps(message),messageId)
 
     rabbitmq_manager.consumer('Interview_Chat', on_message_callback)

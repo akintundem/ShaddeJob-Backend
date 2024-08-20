@@ -4,7 +4,6 @@ const { sendToQueue, receiveFromQueue } = require('../../config/rabbitMQ');
 
 async function uploadResume(req, res) {
     try {
-        console.log("beginning the resume upload.")
         const messageId = uuidv4();
         const action = "ResumeJSON"
         const filePath = "Mayokun_Resume.pdf";

@@ -26,9 +26,25 @@ services:
     networks:
       - my-network
 
-  microservice_resume:
+  microservice_resume_and_coverletter:
     build: 
-      context: ./Microservices/ResumeProcessing
+      context: ./Microservices/GeminiProcessing
+    depends_on:
+      - rabbitmq
+    networks:
+      - my-network
+
+  microservice_interview_processing:
+    build: 
+      context: ./Microservices/InterviewProcessing
+    depends_on:
+      - rabbitmq
+    networks:
+      - my-network
+
+  microservice_cover_letter_pdf_generation:
+    build: 
+      context: ./Microservices/CoverLetterPDFGeneration
     depends_on:
       - rabbitmq
     networks:
