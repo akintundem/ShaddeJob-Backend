@@ -7,8 +7,8 @@ const cors = require('cors');
 // Import routes
 const authRoutes = require('./presentation/routes/authRoutes');
 const resumeRoutes = require('./presentation/routes/resumeRoutes')
-const coverLetterRoutes = require('./presentation/routes/coverLetterRoutes'); 
-const jobRoutes = require('./presentation/routes/jobRoutes'); 
+// const coverLetterRoutes = require('./presentation/routes/coverLetterRoutes'); 
+// const jobRoutes = require('./presentation/routes/jobRoutes'); 
 const interviewRoutes = require('./presentation/routes/interviewRoutes'); 
 
 // Start Web Server.
@@ -26,10 +26,10 @@ app.use(authRoutes);
 app.use(resumeRoutes);
 
 // Cover Letter Generation: This routes will deal with recieveing Resumes from Client and Processing. 
-app.use(coverLetterRoutes);
+// app.use(coverLetterRoutes);
 
 // Job Posting Management.
-app.use(jobRoutes);
+// app.use(jobRoutes);
 
 // Interview Preparation. 
 app.use(interviewRoutes);

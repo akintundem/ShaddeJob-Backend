@@ -1,9 +1,9 @@
-const express = require('express');
-const coverLetterGenerator = require('../controllers/coverLetterGenerator');
+// const express = require('express');
+// const coverLetterGenerator = require('../controllers/coverLetterGenerator');
 
-const router = express.Router();
+// const router = express.Router();
 
-router.get('/generate',coverLetterGenerator)
+// router.get('/generate',coverLetterGenerator)
 
 
-module.exports = router;
+// module.exports = router;

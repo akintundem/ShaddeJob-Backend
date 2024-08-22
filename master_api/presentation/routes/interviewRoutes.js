@@ -1,5 +1,5 @@
 const express = require('express');
-const { startChat,continueChat,getLastChatsByUser,getLast10MessagesByChatId,getPreviousMessages,deleteChat,markMessageAsRead} = require('../controllers/ChatBot');
+const { startChat,continueChat,getLastChatsByUser,getLast10MessagesByChatId,deleteChat,markMessageAsRead} = require('../controllers/ChatBot');
 
 const router = express.Router();
 

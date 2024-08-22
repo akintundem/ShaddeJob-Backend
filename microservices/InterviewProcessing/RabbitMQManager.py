@@ -2,6 +2,8 @@ import logging
 import pika
 import time
 
+logging.basicConfig(level=logging.INFO)
+
 class RabbitMQManager:
     def __init__(self):
         self.connection = None
@@ -10,13 +12,14 @@ class RabbitMQManager:
     def initialize_rabbitmq(self):
         while True:
             try:
+                logging.info("We starting Rabbit Connection")
                 self.connection = pika.BlockingConnection(pika.ConnectionParameters('rabbitmq'))
                 self.channel = self.connection.channel()
                 logging.info("RabbitMQ is ready!")
                 return
-            except pika.exceptions.AMQPConnectionError:
-                logging.info("RabbitMQ is not ready yet. Waiting...")
-                time.sleep(2)
+            except pika.exceptions.AMQPConnectionError as e:
+                logging.error(f"Failed to connect to RabbitMQ: {e}")
+                time.sleep(5)
 
     def get_channel(self):
         if self.channel is None or not self.channel.is_open:

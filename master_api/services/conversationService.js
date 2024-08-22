@@ -1,6 +1,6 @@
-const Conversation = require('../models/Conversation');
+const Conversation = require('../models/conversation');
 const { v4: uuidv4 } = require('uuid');
-const { sendToQueue, receiveFromQueue } = require('../../config/rabbitMQ');
+const { sendToQueue, receiveFromQueue } = require('../config/rabbitMQ');
 
 const startChatService = async (user_id) => {
     const messageId = uuidv4();

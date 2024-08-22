@@ -47,6 +47,7 @@ class MainProcessor:
         self.rabbitmq_manager.send_message("CoverLetterComplete", user_id)
 
     def start(self, queue_name):
+        logging.info("Hello ----------------------------- Hello")
         self.rabbitmq_manager.resume_consumer(queue_name, self.process_resume)
 
 def load_prompt_from_file(file_path):
@@ -60,6 +61,7 @@ if __name__ == "__main__":
     api_key = os.getenv("GEMINI_API_KEY")
     mongo_uri = os.getenv("MONGO_URI")
     db_name = os.getenv("MONGO_DB_NAME")
+    db_name = "ShadeJob"
     prompt_loader = load_prompt_from_file('prompts.json')
 
     rabbitmq_manager = RabbitMQManager()

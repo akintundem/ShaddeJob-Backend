@@ -1,9 +1,9 @@
-const express = require('express');
-const jobGenerator = require('../controllers/authController');
+// const express = require('express');
+// const jobGenerator = require('../controllers/authController');
 
-const router = express.Router();
+// const router = express.Router();
 
-router.get('/getjob',jobGenerator)
+// router.get('/getjob',jobGenerator)
 
 
-module.exports = router;
+// module.exports = router;

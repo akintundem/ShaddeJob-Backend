@@ -1,4 +1,3 @@
-json
 google.generativeai
 pymongo
 uuid

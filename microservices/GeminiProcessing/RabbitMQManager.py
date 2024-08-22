@@ -2,6 +2,8 @@ import pika
 import time
 import logging
 
+logging.basicConfig(level=logging.INFO)
+
 class RabbitMQManager:
     def __init__(self):
         self.connection = None
@@ -39,23 +41,23 @@ class RabbitMQManager:
             logging.error(f"Error sending message to RabbitMQ: {e}")
 
 
-def resume_consumer(self, queue_name, on_message_callback):
-        ch = self.get_channel()
-        if ch is None:
-            logging.error("RabbitMQ channel is not available")
-            return
+    def resume_consumer(self, queue_name, on_message_callback):
+            ch = self.get_channel()
+            if ch is None:
+                logging.error("RabbitMQ channel is not available")
+                return
 
-        ch.queue_declare(queue=queue_name, durable=True)
-        ch.basic_qos(prefetch_count=1)
-        ch.basic_consume(queue=queue_name, on_message_callback=on_message_callback)
-        
-        logging.info('Waiting for messages. To exit press CTRL+C')
-        try:
-            ch.start_consuming()
-        except KeyboardInterrupt:
-            logging.info("Interrupted by user")
-        except Exception as e:
-            logging.error(f"An error occurred: {e}")
-        finally:
-            if self.connection and self.connection.is_open:
-                self.connection.close()
+            ch.queue_declare(queue=queue_name, durable=True)
+            ch.basic_qos(prefetch_count=1)
+            ch.basic_consume(queue=queue_name, on_message_callback=on_message_callback)
+            
+            logging.info('Waiting for messages. To exit press CTRL+C')
+            try:
+                ch.start_consuming()
+            except KeyboardInterrupt:
+                logging.info("Interrupted by user")
+            except Exception as e:
+                logging.error(f"An error occurred: {e}")
+            finally:
+                if self.connection and self.connection.is_open:
+                    self.connection.close()

@@ -1,4 +1,4 @@
-const {getChatsByUserId, getMessagesByChatId, deleteChatByChatId, markMessageAsReadById, startChatService, continueChatService} = require('../services/conversationService');
+const {getChatsByUserId, getMessagesByChatId, deleteChatByChatId, markMessageAsReadById, startChatService, continueChatService} = require('../../services/conversationService');
 
 const startChat = async (req, res) => {
     try {

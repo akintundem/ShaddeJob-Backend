@@ -5,8 +5,5 @@ WORKDIR /usr/src/app
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY resume_processing.py ./
-
-COPY "Mayokun_Resume.pdf" ./
-
+COPY . .
 CMD ["python", "MainProcessor.py"]

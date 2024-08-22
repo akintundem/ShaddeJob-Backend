@@ -57,8 +57,11 @@ if __name__ == "__main__":
     api_key = os.getenv("GEMINI_API_KEY")
     mongo_uri = os.getenv("MONGO_URI")
     db_name = os.getenv("MONGO_DB_NAME")
+    db_name = "ShadeJob"
     conversations_collection_name = os.getenv("conversations_collection_name")
+    conversations_collection_name = "conversations"
     users_collection_name = os.getenv("users_collection_name")
+    users_collection_name = "users"
     system_instructions_file_name = "system_instruction.txt"
 
     gemini_service = GeminiService(api_key)
@@ -82,7 +85,7 @@ if __name__ == "__main__":
                 "action": "Chat_Started",
                 "chat_id": chat_id
             }
-            rabbitmq_manager.send_message(json.dumps(message),messageId)
+            # rabbitmq_manager.send_message(json.dumps(message),messageId)
         elif action == "ConstChat":
             chat_id = parsed_message['chat_id']
             user_id = parsed_message['user_id']
@@ -92,6 +95,7 @@ if __name__ == "__main__":
                 "action": "Bot_Responded",
                 "chat_id": chat_id
             }
-            rabbitmq_manager.send_message(json.dumps(message),messageId)
+            # rabbitmq_manager.send_message(json.dumps(message),messageId)
 
     rabbitmq_manager.consumer('Interview_Chat', on_message_callback)
+

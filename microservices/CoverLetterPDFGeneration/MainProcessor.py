@@ -1,12 +1,11 @@
 from docx import Document
-import pypandoc
 
-def convert_to_pdf(input_path, output_path):
-    try:
-        pypandoc.convert_file(input_path, 'pdf', outputfile=output_path)
-        print("PDF conversion successful.")
-    except Exception as e:
-        print(f"Error: {e}")
+# def convert_to_pdf(input_path, output_path):
+#     try:
+#         pypandoc.convert_file(input_path, 'pdf', outputfile=output_path)
+#         print("PDF conversion successful.")
+#     except Exception as e:
+#         print(f"Error: {e}")
 
 
 def populate_docx(template_path, output_path, data):
@@ -54,4 +53,6 @@ docx_output_path = 'cover_letter_filled.docx'
 pdf_output_path = 'cover_letter_filled.pdf'
 
 populate_docx(template_path, docx_output_path, data)
-convert_to_pdf(docx_output_path, pdf_output_path)
+# convert_to_pdf(docx_output_path, pdf_output_path)
+
+print("hello")

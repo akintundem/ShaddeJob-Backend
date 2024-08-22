@@ -2,6 +2,7 @@ version: '3'
 services:
   rabbitmq:
     image: rabbitmq:management
+    container_name: rabbitmq
     ports:
       - "5672:5672"
       - "15672:15672"
@@ -26,23 +27,7 @@ services:
     networks:
       - my-network
 
-  microservice_resume_and_coverletter:
-    build: 
-      context: ./Microservices/GeminiProcessing
-    depends_on:
-      - rabbitmq
-    networks:
-      - my-network
-
-  microservice_interview_processing:
-    build: 
-      context: ./Microservices/InterviewProcessing
-    depends_on:
-      - rabbitmq
-    networks:
-      - my-network
-
-  microservice_cover_letter_pdf_generation:
+  cover-letter-pdf-generation:
     build: 
       context: ./Microservices/CoverLetterPDFGeneration
     depends_on:
@@ -50,8 +35,24 @@ services:
     networks:
       - my-network
 
+  resume-and-cover_letter-creation:
+    build: 
+      context: ./Microservices/GeminiProcessing
+    depends_on:
+      - rabbitmq
+    networks:
+      - my-network
+
+  interview-processing:
+    build: 
+      context: ./Microservices/InterviewProcessing
+    container_name: interview-processing
+    depends_on:
+      - rabbitmq
+    networks:
+      - my-network
+
+
+
 networks:
   my-network:
-
-volumes:
-  ollama:
